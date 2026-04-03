@@ -1,0 +1,690 @@
+<!DOCTYPE html>
+<html lang="html">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FOR YOU</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            /* Pink Peach Orange elegan */
+            background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 25%, #fed7d7 50%, #fed7aa 75%, #ffedd5 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+            line-height: 1.7;
+            color: #3f2a2a;
+        }
+
+        .container {
+            min-height: 100vh;
+            scroll-snap-align: start;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        /* Login - Fullscreen tanpa box */
+        #loginPage {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            z-index: 1000;
+            background: linear-gradient(135deg, #fb7185 0%, #f472b6 50%, #ec4899 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            backdrop-filter: blur(0px);
+        }
+
+        .login-icon {
+            font-size: 80px;
+            margin-bottom: 32px;
+            opacity: 0.95;
+        }
+
+        .login-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 48px;
+            letter-spacing: -0.02em;
+            line-height: 1.2;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+
+        .password-container {
+            position: relative;
+            max-width: 380px;
+            width: 90%;
+            margin-bottom: 40px;
+        }
+
+        .password-input {
+            width: 100%;
+            padding: 22px 20px 22px 28px;
+            font-size: 18px;
+            font-weight: 400;
+            border: 2px solid rgba(255,255,255,0.4);
+            border-radius: 20px;
+            background: rgba(255,255,255,0.95);
+            backdrop-filter: blur(15px);
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .password-input:focus {
+            outline: none;
+            border-color: white;
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.3), 0 20px 40px rgba(0,0,0,0.15);
+            background: white;
+            transform: translateY(-2px);
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 24px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #fb7185;
+            transition: all 0.3s ease;
+        }
+
+        .toggle-password:hover {
+            color: white;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .login-btn {
+            padding: 20px 48px;
+            font-size: 18px;
+            font-weight: 500;
+            background: rgba(252, 252, 252, 0.95);
+            color: #fb7185;
+            border: none;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', sans-serif;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(10px);
+        }
+
+        .login-btn:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 24px 50px rgba(0,0,0,0.2);
+            background: rgb(254, 254, 254);
+        }
+
+        /* Hide login */
+        body.scrolled #loginPage {
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.6s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        /* Section Titles */
+        .section-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #3f2a2a;
+            margin-bottom: 60px;
+            text-align: center;
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+        }
+
+.music-section {
+    width: 100%;
+    max-width: 1200px;
+}
+
+.music-grid {
+    display: flex;
+    justify-content: center;
+    gap: 32px;
+    margin-bottom: 60px;
+    flex-wrap: wrap;
+}
+
+.music-card {
+    background: white;
+    border-radius: 24px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    border: 1px solid rgba(255,255,255,0.6);
+    width: 340px;
+    text-align: center;
+    flex: 1;
+    min-width: 300px;
+}
+
+.music-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 32px 64px rgba(0,0,0,0.15);
+}
+
+.music-card.playing {
+    box-shadow: 0 0 0 4px #fb7185, 0 32px 64px rgba(251,113,133,0.4);
+    transform: translateY(-12px) scale(1.02);
+}
+
+.music-image {
+    width: 100%;
+    height: 280px;
+    object-fit: cover;
+}
+
+.music-info {
+    padding: 28px 24px;
+}
+
+.music-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.4rem;
+    font-weight: 600;
+    color: #3f2a2a;
+    margin-bottom: 8px;
+}
+
+.music-subtitle {
+    color: #fb7185;
+    font-weight: 500;
+    font-size: 1rem;
+    margin-bottom: 12px;
+}
+
+.music-artist {
+    color: #6b7280;
+    font-size: 0.95rem;
+    font-weight: 400;
+}
+
+        /* Page 2: 2 Quotes - Expandable */
+        .quotes-container {
+            width: 100%;
+            max-width: 1000px;
+            position: relative;
+        }
+
+        /* Page 2 Quotes: Full image + box title */
+.quotes-grid {
+    display: flex;
+    gap: 40px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.quote-card {
+    position: relative;
+    width: 400px;       /* Lebar card */
+    height: 420px;      /* Tinggi sama dengan box putih lama */
+    cursor: pointer;
+    border-radius: 24px;
+    overflow: hidden;   /* biar gambar dan box tidak keluar */
+    box-shadow: 0 12px 40px rgba(0,0,0,0.08);
+    transition: all 0.4s ease;
+}
+
+.quote-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 24px 60px rgba(0,0,0,0.15);
+}
+
+.quote-card img {
+    width: 100%;
+    height: 100%;       /* gambar penuh card */
+    object-fit: cover;
+}
+
+.quote-title {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    background: rgba(255,255,255,0.9);
+    padding: 16px 20px;
+    text-align: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #3f2a2a;
+    margin: 0;
+}
+
+        /* Expanded Quote Modal */
+        .quote-expanded {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+        }
+
+        .quote-expanded.active {
+            display: flex;
+        }
+
+        .expanded-content {
+            background: white;
+            border-radius: 24px;
+            max-width: 800px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideInRight 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .expanded-image {
+            width: 100%;
+            height: auto;
+            object-fit: none;
+            border-radius: 24px 24px 0 0;
+        }
+
+        .expanded-text {
+            padding: 48px;
+        }
+
+        .expanded-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 2rem;
+            font-weight: 700;
+            color: #3f2a2a;
+            margin-bottom: 24px;
+        }
+
+        .expanded-body {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #4b5563;
+            margin-bottom: 32px;
+        }
+
+        .close-btn {
+            position: absolute;
+            top: 24px;
+            right: 24px;
+            background: #fee2e2;
+            border: none;
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            font-size: 20px;
+            cursor: pointer;
+            color: #fb7185;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .close-btn:hover {
+            background: #fecaca;
+            transform: scale(1.1);
+            color: #dc2626;
+        }
+
+        /* Page 3: Thank You Split */
+        .thankyou-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 80px;
+            width: 100%;
+            max-width: 1100px;
+            align-items: center;
+        }
+
+        .thankyou-image {
+            width: 100%;
+            height: 420px;
+            object-fit: cover;
+            border-radius: 24px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+            cursor: pointer;
+            transition: all 0.4s ease;
+        }
+
+        .thankyou-image:hover {
+            transform: scale(1.02);
+            box-shadow: 0 30px 80px rgba(0,0,0,0.2);
+        }
+
+        .thankyou-text-content {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: #4b5563;
+        }
+
+        .thankyou-title {
+            font-family: 'Playfair Display', serif;
+            font-size: 3.5rem;
+            font-weight: 700;
+            color: #3f2a2a;
+            margin-bottom: 28px;
+            letter-spacing: -0.02em;
+        }
+
+        .thankyou-subtitle {
+            font-size: 1.15rem;
+            color: #6b7280;
+            margin-bottom: 24px;
+            font-weight: 400;
+        }
+        
+#page3 {
+    min-height: 100vh;         
+    scroll-snap-align: start; 
+    padding-bottom: 0;
+}
+
+.thankyou-content {
+    min-height: 100%;
+}
+
+        /* Animations */
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%) scale(0.9);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 1024px) {
+            .thankyou-content {
+                grid-template-columns: 1fr;
+                gap: 60px;
+                text-align: center;
+            }
+            .thankyou-image { height: 320px; }
+        }
+
+        @media (max-width: 768px) {
+            .section-title { font-size: 2.5rem; }
+            .music-images, .music-texts, .quotes-grid {
+                grid-template-columns: 1fr;
+                gap: 28px;
+            }
+            .login-title { font-size: 2.2rem; }
+            .password-container { max-width: 320px; }
+        }
+
+        html { scroll-snap-type: y mandatory; }
+        audio { display: none; }
+    </style>
+</head>
+<body>
+    <!-- Login Fullscreen -->
+    <div id="loginPage">
+        <div class="login-icon">💕</div>
+        <h1 class="login-title">Enter Our Secret Date</h1>
+        <div class="password-container">
+            <input type="password" class="password-input" id="passwordInput" placeholder="Our Date...">
+            <button type="button" class="toggle-password" onclick="togglePassword()">👁️</button>
+        </div>
+        <button class="login-btn" onclick="checkPassword()">Enter</button>
+    </div>
+
+    <!-- Page 1: Music -->
+    <!-- Page 1: Music - 3 Foto Sejajar + Teks Bawah -->
+<div class="container" id="page1">
+    <h1 class="section-title">Select Our Fav Songs 💕</h1>
+    <div class="music-section">
+        <div class="music-grid">
+            <!-- Lagu 1 -->
+            <div class="music-card" onclick="playMusic(0)">
+                <img src="Just The Way You Are.jpg" 
+                     alt="Just The Way You Are" class="music-image">
+                <div class="music-info">
+                    <div class="music-title">Just The Way You Are</div>
+                    <div class="music-artist">Bruno Mars</div>
+                </div>
+            </div>
+
+            <!-- Lagu 2 -->
+            <div class="music-card" onclick="playMusic(1)">
+                <img src="Lover.jpg" 
+                     alt="Lover" class="music-image">
+                <div class="music-info">
+                    <div class="music-title">Lover</div>
+                    <div class="music-artist">Taylor Swift</div>
+                </div>
+            </div>
+
+            <!-- Lagu 3 -->
+            <div class="music-card" onclick="playMusic(2)">
+                <img src="Lowkey.jpg" 
+                     alt="Lowkey" class="music-image">
+                <div class="music-info">
+                    <div class="music-title">Lowkey</div>
+                    <div class="music-artist">NIKI</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+    <!-- Page 2: 2 Quotes Expandable -->
+    <div class="container" id="page2">
+        <h1 class="section-title">Spesial Massage For You</h1>
+        <div class="quotes-container">
+    <div class="quotes-grid">
+        <!-- Quote 1 -->
+        <div class="quote-card" onclick="openQuote(0)">
+            <img src="CICI1.jpeg" alt="Photo 1" class="quote-image">
+            <div class="quote-text-box">
+                <h3 class="quote-title">The Reason I Smile Everyday</h3>
+            </div>
+        </div>
+        
+        <!-- Quote 2 -->
+        <div class="quote-card" onclick="openQuote(1)">
+            <img src="uci.jpeg" alt="Photo 2" class="quote-image">
+            <div class="quote-text-box">
+                <h3 class="quote-title">Life Is More Beautiful With You</h3>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+
+    <!-- Quote Expanded Modal -->
+    <div class="quote-expanded" id="quoteModal">
+        <div class="expanded-content">
+            <button class="close-btn" onclick="closeQuote()">×</button>
+            <img class="expanded-image" id="expandedImg" src="" alt="Expanded">
+            <div class="expanded-text">
+                <h2 class="expanded-title" id="expandedTitle"></h2>
+                <div class="expanded-body" id="expandedBody"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 3: Thank You Split -->
+    <div class="container" id="page3">
+        <h1 class="thankyou-title">Thank You My Love</h1>
+        <div class="thankyou-content">
+            <img class="thankyou-image" src="kami.jpeg" 
+                 alt="Kita" onclick="finalMessage()">
+            <div class="thankyou-text-content">
+                <div class="thankyou-subtitle">For You, My Spesial One</div>
+                <p>You are the most beautiful part of my life. Every moment with you is a memory i will cherish forever.</p>
+                <p style="margin-top: 28px; font-weight: 500; font-size: 1.15rem; color: #3f2a2a;">
+                    With Love, <br><strong>Forever Yours 💕</strong>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <audio id="audioPlayer"></audio>
+
+    <script>
+        let isPlaying = false;
+        let isPasswordVisible = false;
+        const quotesData = [
+            {
+                img: "CICI1.jpeg",
+                title: "The Reason I Smile Everyday",
+                body: "Every day with you feels like a dream I never want to wake up from. Your smile lights up even my darkest days, and your laughter is the sweetest melody my heart has ever known. Being with you makes the world feel more magical, and every moment we share is a memory I will treasure forever. 💕"
+            },
+            {
+                img: "uci.jpeg",
+                title: "Life Is More Beautiful With You",
+                body: "With you, life becomes a beautiful journey full of colors I never knew existed. Your presence turns ordinary moments into extraordinary memories, and your love gives me strength I never imagined. I am endlessly grateful for every second spent with you, for you are the most precious gift I could ever receive. 🌹"
+            }
+        ];
+
+        // Password: 2607
+        function checkPassword() {
+            const password = document.getElementById('passwordInput').value;
+            if (password === '2607') {
+                document.body.classList.add('scrolled');
+            } else {
+                shakeInput();
+                setTimeout(() => alert('Password salah sayang. Coba lagi deh.'), 200);
+                document.getElementById('passwordInput').value = '';
+            }
+        }
+
+        function shakeInput() {
+            const input = document.querySelector('.password-input');
+            input.style.animation = 'shake 0.5s ease-in-out';
+            setTimeout(() => input.style.animation = '', 500);
+        }
+
+        function togglePassword() {
+            const input = document.getElementById('passwordInput');
+            const btn = event.target;
+            input.type = input.type === 'password' ? 'text' : 'password';
+            btn.textContent = input.type === 'password' ? '👁️' : '🙈';
+            isPasswordVisible = !isPasswordVisible;
+        }
+
+            const songs = [
+            "Bruno Mars - Just The Way You Are (Lyrics).mp3",
+            "Taylor Swift - Lover.mp3",
+            "NIKI - lowkey.mp3"
+];
+
+        function playMusic(index) {
+            const audio = document.getElementById('audioPlayer');
+            const cards = document.querySelectorAll('.music-card');
+
+            cards.forEach(card => card.classList.remove('playing'));
+            cards[index].classList.add('playing');
+
+            audio.pause();
+            audio.currentTime = 0;
+
+            audio.src = songs[index];
+            audio.play();
+}
+
+        // Quote expandable
+        function openQuote(index) {
+            const modal = document.getElementById('quoteModal');
+            const img = document.getElementById('expandedImg');
+            const title = document.getElementById('expandedTitle');
+            const body = document.getElementById('expandedBody');
+            
+            img.src = quotesData[index].img;
+            title.textContent = quotesData[index].title;
+            body.textContent = quotesData[index].body;
+            
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeQuote() {
+            document.getElementById('quoteModal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        function finalMessage() {
+            alert('💕 Terima kasih sudah menjadi bagian hidupku. Aku cinta kamu selamanya 💕');
+        }
+
+        // Event listeners
+        document.getElementById('passwordInput').addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') checkPassword();
+        });
+
+        // Close modal on escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeQuote();
+        });
+
+        // Prevent scroll when modal open
+        document.getElementById('quoteModal').addEventListener('click', (e) => {
+            if (e.target === e.currentTarget) closeQuote();
+        });
+
+        // Music auto-pause
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting && isPlaying && entry.target.id !== 'page1') {
+                    document.getElementById('audioPlayer').pause();
+                    isPlaying = false;
+                    document.querySelectorAll('.music-image-card').forEach(c => c.classList.remove('playing'));
+                }
+            });
+        }, { threshold: 0.3 });
+
+        observer.observe(document.getElementById('page1'));
+        observer.observe(document.getElementById('page2'));
+        observer.observe(document.getElementById('page3'));
+
+        // Shake animation
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes shake {
+                0%, 100% { transform: translateX(0); }
+                10%, 30%, 50%, 70%, 90% { transform: translateX(-4px); }
+                20%, 40%, 60%, 80% { transform: translateX(4px); }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Smooth scroll snap
+        document.documentElement.style.scrollSnapType = 'y mandatory';
+    </script>
+</body>
+</html>
